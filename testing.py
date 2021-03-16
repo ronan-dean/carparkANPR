@@ -23,8 +23,3 @@ if action == "3":
     query = {"plate": exit}
     mycol.update_many(query, {"$set": { "exited": True}})
     print("car exited")
-
-
-
-##user = { "_id": "1", "plate": "1234", "time": "12"}
-##x = mycol.insert_one(user)

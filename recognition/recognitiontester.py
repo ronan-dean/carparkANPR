@@ -52,13 +52,13 @@ class PyImageSearchANPR:
 		self.debug_imshow("Grad Thresh", thresh)
 		# perform a series of erosions and dilations to clean up the
 		# thresholded image
-		thresh = cv2.erode(thresh, None, iterations=1)
-		thresh = cv2.dilate(thresh, None, iterations=20)
+		thresh = cv2.erode(thresh, None, iterations=0)
+		thresh = cv2.dilate(thresh, None, iterations=4)
 		self.debug_imshow("Grad Erode/Dilate", thresh)
 		# take the bitwise AND between the threshold result and the
 		# light regions of the image
 		thresh = cv2.bitwise_and(thresh, thresh, mask=light)
-		thresh = cv2.dilate(thresh, None, iterations=10)
+		thresh = cv2.dilate(thresh, None, iterations=15)
 		thresh = cv2.erode(thresh, None, iterations=20)
 		self.debug_imshow("Final", thresh, waitKey=True)
 		# find contours in the thresholded image and sort them by

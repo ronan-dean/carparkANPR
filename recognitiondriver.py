@@ -1,5 +1,5 @@
 # import the necessary packages
-from recognition.recognitiontester import PyImageSearchANPR
+from recognition.recognition_processing import ANPR
 from imutils import paths
 import argparse
 import imutils
@@ -20,7 +20,7 @@ ap.add_argument("-d", "--debug", type=int, default=-1,
 	help="whether or not to show additional visualizations")
 args = vars(ap.parse_args())
 # initialize our ANPR class
-anpr = PyImageSearchANPR(debug=args["debug"] > 0)
+anpr = ANPR(debug=args["debug"] > 0)
 # grab all image paths in the input directory
 imagePaths = sorted(list(paths.list_images(args["input"])))
 

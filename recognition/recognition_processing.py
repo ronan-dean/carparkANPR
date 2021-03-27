@@ -5,7 +5,7 @@ import numpy as np
 import imutils
 import cv2
 
-class PyImageSearchANPR:
+class ANPR:
 	def __init__(self, minAR=2, maxAR=3, debug=True):
 		# store the minimum and maximum rectangular aspect ratio
 		# values along with whether or not we are in debug mode
@@ -110,6 +110,7 @@ class PyImageSearchANPR:
 		options = "-c tessedit_char_whitelist={}".format(alphanumeric)
 		# set the PSM mode
 		options += " --psm {}".format(psm)
+		# set to use custom trained lang
 		options += " -l carplate"
 		# return the built options string
 		return options

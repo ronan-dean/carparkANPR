@@ -6,7 +6,7 @@ import imutils
 import cv2
 
 class PyImageSearchANPR:
-	def __init__(self, minAR=0.5, maxAR=100, debug=True):
+	def __init__(self, minAR=2, maxAR=3, debug=True):
 		# store the minimum and maximum rectangular aspect ratio
 		# values along with whether or not we are in debug mode
 		self.minAR = minAR
@@ -52,14 +52,14 @@ class PyImageSearchANPR:
 		self.debug_imshow("Grad Thresh", thresh, waitKey=True)
 		# perform a series of erosions and dilations to clean up the
 		# thresholded image
-		thresh = cv2.erode(thresh, None, iterations=3)
-		thresh = cv2.dilate(thresh, None, iterations=15)
+		thresh = cv2.erode(thresh, None, iterations=1)
+		thresh = cv2.dilate(thresh, None, iterations=5)
 		self.debug_imshow("Grad Erode/Dilate", thresh)
 		# take the bitwise AND between the threshold result and the
 		# light regions of the image
 		thresh = cv2.bitwise_and(thresh, thresh, mask=light)
-		thresh = cv2.dilate(thresh, None, iterations=15)
-		thresh = cv2.erode(thresh, None, iterations=3)
+		thresh = cv2.dilate(thresh, None, iterations=5)
+		thresh = cv2.erode(thresh, None, iterations=0)
 		self.debug_imshow("Final", thresh, waitKey=True)
 		# find contours in the thresholded image and sort them by
 		# their size in descending order, keeping only the largest
@@ -110,6 +110,7 @@ class PyImageSearchANPR:
 		options = "-c tessedit_char_whitelist={}".format(alphanumeric)
 		# set the PSM mode
 		options += " --psm {}".format(psm)
+		options += " -l carplate"
 		# return the built options string
 		return options
 	def find_and_ocr(self, image, psm=7, clearBorder=False):    

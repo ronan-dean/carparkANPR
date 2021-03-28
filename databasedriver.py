@@ -14,12 +14,12 @@ if action == "1":
     for x in result:
         print(x)
 if action == "2":
-    enter = input("Car plate: ")
-    user = {"plate": enter, "time": datetime.now(), "exited": False}
+    plate = input("Car plate: ")
+    user = {"plate": plate, "timeEntered": datetime.now(), "exited": False}
     mycol.insert_one(user)
     print("car entered")
 if action == "3":
     exit = input("Car plate to exit: ")
     query = {"plate": exit}
-    mycol.update_many(query, {"$set": { "exited": True}})
+    mycol.update_many(query, {"$set": { "exited": True, "timeExited": datetime.now()}})
     print("car exited")

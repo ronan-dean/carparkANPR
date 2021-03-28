@@ -6,7 +6,7 @@ import imutils
 import cv2
 
 class ANPR:
-	def __init__(self, minAR=2, maxAR=3, debug=True):
+	def __init__(self, minAR=2, maxAR=3, debug=False):
 		# store the minimum and maximum rectangular aspect ratio
 		# values along with whether or not we are in debug mode
 		self.minAR = minAR
@@ -49,7 +49,7 @@ class ANPR:
 		gradX = cv2.morphologyEx(gradX, cv2.MORPH_CLOSE, rectKern)
 		thresh = cv2.threshold(gradX, 100, 255,
 			cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
-		self.debug_imshow("Grad Thresh", thresh, waitKey=True)
+		self.debug_imshow("Grad Thresh", thresh)
 		# perform a series of erosions and dilations to clean up the
 		# thresholded image
 		thresh = cv2.erode(thresh, None, iterations=1)

@@ -5,8 +5,8 @@ import numpy as np
 import imutils
 import cv2
 
-class PyImageSearchANPR:
-	def __init__(self, minAR=0.5, maxAR=100, debug=True):
+class ANPR:
+	def __init__(self, minAR=2, maxAR=3, debug=True):
 		# store the minimum and maximum rectangular aspect ratio
 		# values along with whether or not we are in debug mode
 		self.minAR = minAR
@@ -24,7 +24,7 @@ class PyImageSearchANPR:
 		# perform a blackhat morphological operation that will allow
 		# us to reveal dark regions (i.e., text) on light backgrounds
 		# (i.e., the license plate itself)
-		rectKern = cv2.getStructuringElement(cv2.MORPH_RECT, (13, 5))
+		rectKern = cv2.getStructuringElement(cv2.MORPH_RECT, (12, 4))
 		blackhat = cv2.morphologyEx(gray, cv2.MORPH_BLACKHAT, rectKern)
 		self.debug_imshow("Blackhat", blackhat)
 		# next, find regions in the image that are light
@@ -45,21 +45,21 @@ class PyImageSearchANPR:
 		self.debug_imshow("Scharr", gradX)
 		# blur the gradient representation, applying a closing
 		# operation, and threshold the image using Otsu's method
-		gradX = cv2.GaussianBlur(gradX, (1, 1), 0)
+		gradX = cv2.GaussianBlur(gradX, (5, 5), 0)
 		gradX = cv2.morphologyEx(gradX, cv2.MORPH_CLOSE, rectKern)
 		thresh = cv2.threshold(gradX, 100, 255,
 			cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
-		self.debug_imshow("Grad Thresh", thresh)
+		self.debug_imshow("Grad Thresh", thresh, waitKey=True)
 		# perform a series of erosions and dilations to clean up the
 		# thresholded image
-		thresh = cv2.erode(thresh, None, iterations=0)
-		thresh = cv2.dilate(thresh, None, iterations=4)
+		thresh = cv2.erode(thresh, None, iterations=1)
+		thresh = cv2.dilate(thresh, None, iterations=5)
 		self.debug_imshow("Grad Erode/Dilate", thresh)
 		# take the bitwise AND between the threshold result and the
 		# light regions of the image
 		thresh = cv2.bitwise_and(thresh, thresh, mask=light)
-		thresh = cv2.dilate(thresh, None, iterations=15)
-		thresh = cv2.erode(thresh, None, iterations=20)
+		thresh = cv2.dilate(thresh, None, iterations=5)
+		thresh = cv2.erode(thresh, None, iterations=0)
 		self.debug_imshow("Final", thresh, waitKey=True)
 		# find contours in the thresholded image and sort them by
 		# their size in descending order, keeping only the largest
@@ -106,10 +106,12 @@ class PyImageSearchANPR:
 		return (roi, lpCnt)
 	def build_tesseract_options(self, psm=7):
 		# tell Tesseract to only OCR alphanumeric characters
-		alphanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+		alphanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-"
 		options = "-c tessedit_char_whitelist={}".format(alphanumeric)
 		# set the PSM mode
 		options += " --psm {}".format(psm)
+		# set to use custom trained lang
+		options += " -l carplatev2"
 		# return the built options string
 		return options
 	def find_and_ocr(self, image, psm=7, clearBorder=False):    

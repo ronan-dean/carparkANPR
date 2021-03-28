@@ -106,12 +106,12 @@ class ANPR:
 		return (roi, lpCnt)
 	def build_tesseract_options(self, psm=7):
 		# tell Tesseract to only OCR alphanumeric characters
-		alphanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+		alphanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-"
 		options = "-c tessedit_char_whitelist={}".format(alphanumeric)
 		# set the PSM mode
 		options += " --psm {}".format(psm)
 		# set to use custom trained lang
-		options += " -l carplate"
+		options += " -l carplatev2"
 		# return the built options string
 		return options
 	def find_and_ocr(self, image, psm=7, clearBorder=False):    

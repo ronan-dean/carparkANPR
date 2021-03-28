@@ -3,6 +3,7 @@ from imutils import paths
 import argparse
 import imutils
 import cv2
+import time
 def cleanup_text(text):
 	# strip out non-ASCII text so we can draw the text on the image
 	# using OpenCV
@@ -12,14 +13,21 @@ psm = 7
 clearBorder = 1
 debug = 0
 anpr = ANPR(debug > 0)
-for imagePath in imagePaths:
-	# load the input image from disk and resize it
-	image = cv2.imread(imagePath)
-	image = imutils.resize(image, width=600)
-	# call the apnr class and apply to images
-	(lpText, lpCnt) = anpr.find_and_ocr(image, psm,
-		clearBorder > 0)
-	# only continue if the license plate was successfully OCR'd
-	if lpText is not None and lpCnt is not None:
-		# print the license plate to terminal 
-	    print("[INFO] {}".format(lpText))
+test1 = input("Perform recognition? ")
+if test1 == "yes":
+    tic = time.perf_counter()
+    for imagePath in imagePaths:
+        # load the input image from disk and resize it
+        image = cv2.imread(imagePath)
+        image = imutils.resize(image, width=600)
+        # call the apnr class and apply to images
+        (lpText, lpCnt) = anpr.find_and_ocr(image, psm,
+            clearBorder > 0)
+        # only continue if the license plate was successfully OCR'd
+        if lpText is not None and lpCnt is not None:
+            # print the license plate to terminal 
+            print("[INFO] {}".format(lpText))
+    toc = time.perf_counter()
+    print(f"time taken {toc - tic:0.4f}")
+else:
+    print("waiting")

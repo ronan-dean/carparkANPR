@@ -9,6 +9,9 @@ import time
 import pymongo
 from datetime import datetime
 from datetime import timedelta
+# Add ultrasnic distance class
+from recognition.ultrasonicdriver import distance
+dis = distance()
 # Configure database
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["carpark"]

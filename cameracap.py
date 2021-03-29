@@ -12,6 +12,7 @@ while True:
     if not ret:
         print("failed to grab frame")
         break
+    # rotate the image becuase its upside down
     rotated = imutils.rotate_bound(frame, -180)
     cv2.imshow("test", rotated)
 

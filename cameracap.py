@@ -1,7 +1,8 @@
 import cv2
-
-cam = cv2.VideoCapture(4)
-cam.set(cv2.CAP_PROP_BRIGHTNESS,0)
+import imutils
+cam = cv2.VideoCapture(0)
+cam.set(cv2.CAP_PROP_BRIGHTNESS,-25)
+cam.set(cv2.CAP_PROP_GAMMA,-100)
 cv2.namedWindow("test")
 
 img_counter = 0
@@ -11,7 +12,8 @@ while True:
     if not ret:
         print("failed to grab frame")
         break
-    cv2.imshow("test", frame)
+    rotated = imutils.rotate_bound(frame, -180)
+    cv2.imshow("test", rotated)
 
     k = cv2.waitKey(1)
     if k%256 == 27:
@@ -21,7 +23,7 @@ while True:
     elif k%256 == 32:
         # SPACE pressed
         img_name = "opencv_frame_{}.png".format(img_counter)
-        cv2.imwrite(img_name, frame)
+        cv2.imwrite(img_name, rotated)
         print("{} written!".format(img_name))
         img_counter += 1
 

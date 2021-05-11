@@ -5,7 +5,7 @@ myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 
 mydb = myclient["carpark"]
 
-mycol = mydb["testing"]
+mycol = mydb["paymenttesting"]
 action = input("1. Find Time 2. Enter car 3. Exit car")
 if action == "1":
     find = input("Enter car plate: ")

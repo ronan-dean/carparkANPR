@@ -35,10 +35,24 @@ if count > 1:
         print("Total time in mins", mins)
         if mins <= 60:
             print("cost is $2")
+            u = payCard["lastBal"] - 2
+            paycol.update_one({"card": payCard["card"]}, {"$set": {"balance": u}})
         if mins > 60 and mins < 119:
             print("cost is $4")
+            u = payCard["lastBal"] - 4
+            print("updating database now")
+            paycol.update_one({"card": payCard["card"]}, {"$set": {"balance": u}})
         if mins > 120 and mins < 179:
             print("cost is $6")
+            u = payCard["lastBal"] - 6
+            print("updating database now")
+            paycol.update_one({"card": payCard["card"]}, {"$set": {"balance": u}})
+        if mins > 180:
+            print("cost is $10")
+            u = payCard["lastBal"] - 10
+            print("updating database now")
+            paycol.update_one({"card": payCard["card"]}, {"$set": {"balance": u}})
+
         
         
 

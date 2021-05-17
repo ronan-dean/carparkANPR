@@ -9,13 +9,10 @@ import time
 import pymongo
 from datetime import datetime
 from datetime import timedelta
-# Add ultrasnic distance class
-from recognition.ultrasonicdriver import distance
-dis = distance()
 # Configure database
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["carpark"]
-mycol = mydb["v0.1.1"]
+mycol = mydb["v0.2"]
 def cleanup_text(text):
 	# strip out non-ASCII text so we can draw the text on the image
 	# using OpenCV
@@ -26,25 +23,28 @@ clearBorder = 1
 debug = 0
 anpr = ANPR(debug > 0)
 cam = cv2.VideoCapture(0)
-cam.set(cv2.CAP_PROP_BRIGHTNESS,0)
-cam.set(cv2.CAP_PROP_GAMMA,-100)
+#cam.set(cv2.CAP_PROP_BRIGHTNESS,0)
+#cam.set(cv2.CAP_PROP_GAMMA,-100)
+print("1")
 test1 = input("1. Enter 2. Exit 3. Search ")
 if test1 == "1":
     tic = time.perf_counter()
-        # load the input image from disk and resize it
+    # load the input image from disk and resize it
     ret, image = cam.read()
     image = imutils.resize(image, width=600)
     image = imutils.rotate_bound(image, -180)
-        # call the apnr class and apply to images
+    # call the apnr class and apply to images
     (lpText, lpCnt) = anpr.find_and_ocr(image, psm,
         clearBorder > 0)
-        # only continue if the license plate was successfully OCR'd
+     # only continue if the license plate was successfully OCR'd
     if lpText is not None and lpCnt is not None:
         # print the license plate to terminal 
         print("[INFO] {}".format(lpText))
-       # user = {"plate": lpText, "timeEntered": datetime.now(), "exited": False}
-       # mycol.insert_one(user)
-       # print("Plate entered")
+        # user = {"plate": lpText, "timeEntered": datetime.now(), "exited": False}
+        # mycol.insert_one(user)
+        # print("Plate entered")
+    else: 
+        print("No license plate here")
     toc = time.perf_counter()
     print(f"time taken {toc - tic:0.4f}")
 if test1 =="2":

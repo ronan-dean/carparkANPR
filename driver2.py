@@ -16,7 +16,7 @@ mycol = mydb["v0.2"]
 a = 10 
 errorCount = 0
 for x in range(a):
-    plate = ANPR("straightplate")
+    plate = ANPR("straightplate", 0)
     print(plate)
     if plate == "none":
         errorCount = errorCount + 1

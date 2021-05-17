@@ -13,11 +13,15 @@ from datetime import timedelta
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["carpark"]
 mycol = mydb["v0.2"]
-
-print("calling anpr")
-text = ANPR()
-print("ANPR done")
-print(text)
-if text == "none":
-    text = ANPR()
-    print(text)
+a = 10 
+errorCount = 0
+for x in range(a):
+    plate = ANPR("straightplate")
+    print(plate)
+    if plate == "none":
+        errorCount = errorCount + 1
+sucessRate = 10 - errorCount
+sucessRate = sucessRate * 10
+print(f"{sucessRate}%")
+        
+    

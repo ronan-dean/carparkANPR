@@ -1,5 +1,6 @@
 # Import ANPR script
 from recognition.recognitionv2 import ANPR
+from recognition.rfiddriver import readTag
 from imutils import paths
 import argparse
 import imutils
@@ -13,6 +14,7 @@ from datetime import timedelta
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["carpark"]
 mycol = mydb["v0.2"]
+
 a = 10 
 errorCount = 0
 for x in range(a):
@@ -23,5 +25,6 @@ for x in range(a):
 sucessRate = 10 - errorCount
 sucessRate = sucessRate * 10
 print(f"{sucessRate}%")
-        
+
+
     

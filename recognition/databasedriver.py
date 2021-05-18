@@ -1,9 +1,10 @@
 import pymongo
 from datetime import datetime
 from datetime import timedelta
-myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+myclient = pymongo.MongoClient("mongodb+srv://ronanpi:Nuggets1@cluster0.fjaqs.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 mydb = myclient["carpark"]
 mycol = mydb["paymenttesting"]
+paycol = mydb["cardtesting"]
 
 def enterCar(plate):
     user = {"plate": plate, "timeEntered": datetime.now(), "exited": False}
@@ -12,11 +13,14 @@ def enterCar(plate):
 
 def exitCar(plate, card):
     carResult = mycol.find_one({"plate": plate, "exited": False})
+    print(card)
     payCard = paycol.find_one({"card": card})
-    timeInPark = datetime.now() - carResult["time"]
+    print(payCard)
+    timeInPark = datetime.now() - carResult["timeEntered"]
     print("This car spent", timeInPark, "time in the car park")
     mins = timeInPark.total_seconds() / 60
     print("Total time in mins", mins)
+    mycol.update_one({"_id": carResult["_id"]}, {"$set": {"exited": True}})
     if mins <= 60:
         print("cost is $2")
         u = payCard["lastBal"] - 2
@@ -36,6 +40,6 @@ def exitCar(plate, card):
         u = payCard["lastBal"] - 10
         print("updating database now")
         paycol.update_one({"card": payCard["card"]}, {"$set": {"balance": u}})
-    mycol.update_many(query, {"$set": { "exited": True, "timeExited": datetime.now()}})
-    print(f"{plate} exited")
+   
+
 

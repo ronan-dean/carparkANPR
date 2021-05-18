@@ -2,6 +2,7 @@
 from recognition.recognitionv2 import ANPR
 from recognition.rfiddriver import readTag
 from recognition.databasedriver import enterCar
+from recognition.databasedriver import exitCar
 from imutils import paths
 import argparse
 import imutils
@@ -33,7 +34,9 @@ if action == str("2"):
     print(plate)
     print("Waiting to read tag")
     uid = readTag()
+    uid = str(uid)
     print(uid)
+    exitCar(plate, uid)
 
 
     

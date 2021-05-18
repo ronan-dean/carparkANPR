@@ -1,6 +1,8 @@
 from pirc522 import RFID
 rdr = RFID()
+import RPi.GPIO as GPIO
 
+GPIO.setwarnings(False)
 
 def readTag():
   rdr.wait_for_tag()
@@ -12,6 +14,3 @@ def readTag():
       print("read")
   rdr.cleanup()
   return uid
-
-uid = readTag()
-print(uid)

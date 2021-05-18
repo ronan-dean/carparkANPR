@@ -9,9 +9,8 @@ mycol = mydb["paymenttesting"]
 paydb = myclient["carpark"]
 paycol = paydb["cardtesting"]
 
-mycard = "1234"
-myplate = "abc-def"
-query = { "card": mycard }
+
+query = { "card": card }
 cursor = mycol.find(query)
 
 count = mycol.count_documents({"plate": myplate})
